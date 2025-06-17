@@ -65,6 +65,15 @@ class PreferenceActivity : AppCompatActivity() {
                 true
             }
 
+            // Auto Mute 开关与Prefs同步
+            val autoMutePref = getPreference("auto_mute")
+            autoMutePref.setOnPreferenceChangeListener { _, newValue ->
+                Prefs(requireContext()).autoMute = newValue as Boolean
+                true
+            }
+            autoMutePref.isPersistent = false
+            autoMutePref.isChecked = Prefs(requireContext()).autoMute
+
             var debugInfo = ""
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val isIgnoringBatteryOptimizations = requireContext()
@@ -132,3 +141,4 @@ class AboutButtonsListener : LibsConfiguration.LibsListener {
 
 fun PreferenceFragmentCompat.getPreference(key: String) =
     preferenceManager.findPreference<Preference>(key)!!
+
